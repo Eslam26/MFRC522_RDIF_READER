@@ -1,0 +1,1393 @@
+
+MFRC522_RDIF_READER.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000082a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         00001080  00000000  00000000  00000880  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      00001618  00000000  00000000  00001900  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 13 04 	jmp	0x826	; 0x826 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#include "mfrc522.h"
+
+
+
+int main ()
+{
+  6c:	df 93       	push	r29
+  6e:	cf 93       	push	r28
+  70:	cd b7       	in	r28, 0x3d	; 61
+  72:	de b7       	in	r29, 0x3e	; 62
+  74:	ff cf       	rjmp	.-2      	; 0x74 <main+0x8>
+
+00000076 <MFRC522_init>:
+ 	 	 	 	 	 This arg shall indicates the address of the structure that contains the conditions
+ 	 	 	 	 	 that uses to intialize MFRC522
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void MFRC522_init(const MFRC522_configType *MFRC522_configType_Ptr) {
+  76:	df 93       	push	r29
+  78:	cf 93       	push	r28
+  7a:	00 d0       	rcall	.+0      	; 0x7c <MFRC522_init+0x6>
+  7c:	0f 92       	push	r0
+  7e:	cd b7       	in	r28, 0x3d	; 61
+  80:	de b7       	in	r29, 0x3e	; 62
+  82:	9b 83       	std	Y+3, r25	; 0x03
+  84:	8a 83       	std	Y+2, r24	; 0x02
+	uint8 Byte = 0;
+  86:	19 82       	std	Y+1, r1	; 0x01
+	MFRC522_reset();
+  88:	0e 94 6b 01 	call	0x2d6	; 0x2d6 <MFRC522_reset>
+	/* setting TmodeRegister */
+	Byte = (Byte)
+  8c:	ea 81       	ldd	r30, Y+2	; 0x02
+  8e:	fb 81       	ldd	r31, Y+3	; 0x03
+  90:	01 90       	ld	r0, Z+
+  92:	f0 81       	ld	r31, Z
+  94:	e0 2d       	mov	r30, r0
+  96:	80 81       	ld	r24, Z
+  98:	88 2f       	mov	r24, r24
+  9a:	90 e0       	ldi	r25, 0x00	; 0
+  9c:	96 95       	lsr	r25
+  9e:	98 2f       	mov	r25, r24
+  a0:	88 27       	eor	r24, r24
+  a2:	97 95       	ror	r25
+  a4:	87 95       	ror	r24
+  a6:	98 2f       	mov	r25, r24
+  a8:	89 81       	ldd	r24, Y+1	; 0x01
+  aa:	89 2b       	or	r24, r25
+  ac:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->TmodeRegister_config->timerAuto
+					& 0b00000001) << TAuto);
+	Byte = (Byte)
+  ae:	ea 81       	ldd	r30, Y+2	; 0x02
+  b0:	fb 81       	ldd	r31, Y+3	; 0x03
+  b2:	01 90       	ld	r0, Z+
+  b4:	f0 81       	ld	r31, Z
+  b6:	e0 2d       	mov	r30, r0
+  b8:	81 81       	ldd	r24, Z+1	; 0x01
+  ba:	88 2f       	mov	r24, r24
+  bc:	90 e0       	ldi	r25, 0x00	; 0
+  be:	83 70       	andi	r24, 0x03	; 3
+  c0:	90 70       	andi	r25, 0x00	; 0
+  c2:	88 0f       	add	r24, r24
+  c4:	99 1f       	adc	r25, r25
+  c6:	82 95       	swap	r24
+  c8:	92 95       	swap	r25
+  ca:	90 7f       	andi	r25, 0xF0	; 240
+  cc:	98 27       	eor	r25, r24
+  ce:	80 7f       	andi	r24, 0xF0	; 240
+  d0:	98 27       	eor	r25, r24
+  d2:	98 2f       	mov	r25, r24
+  d4:	89 81       	ldd	r24, Y+1	; 0x01
+  d6:	89 2b       	or	r24, r25
+  d8:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->TmodeRegister_config->gatedMode
+					& 0b00000011) << TGated);
+	Byte = (Byte)
+  da:	ea 81       	ldd	r30, Y+2	; 0x02
+  dc:	fb 81       	ldd	r31, Y+3	; 0x03
+  de:	01 90       	ld	r0, Z+
+  e0:	f0 81       	ld	r31, Z
+  e2:	e0 2d       	mov	r30, r0
+  e4:	82 81       	ldd	r24, Z+2	; 0x02
+  e6:	88 2f       	mov	r24, r24
+  e8:	90 e0       	ldi	r25, 0x00	; 0
+  ea:	81 70       	andi	r24, 0x01	; 1
+  ec:	90 70       	andi	r25, 0x00	; 0
+  ee:	82 95       	swap	r24
+  f0:	92 95       	swap	r25
+  f2:	90 7f       	andi	r25, 0xF0	; 240
+  f4:	98 27       	eor	r25, r24
+  f6:	80 7f       	andi	r24, 0xF0	; 240
+  f8:	98 27       	eor	r25, r24
+  fa:	98 2f       	mov	r25, r24
+  fc:	89 81       	ldd	r24, Y+1	; 0x01
+  fe:	89 2b       	or	r24, r25
+ 100:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->TmodeRegister_config->autoRestart
+					& 0b00000001) << TAutoRestart);
+	Byte =
+ 102:	ea 81       	ldd	r30, Y+2	; 0x02
+ 104:	fb 81       	ldd	r31, Y+3	; 0x03
+ 106:	01 90       	ld	r0, Z+
+ 108:	f0 81       	ld	r31, Z
+ 10a:	e0 2d       	mov	r30, r0
+ 10c:	84 81       	ldd	r24, Z+4	; 0x04
+ 10e:	95 81       	ldd	r25, Z+5	; 0x05
+ 110:	80 70       	andi	r24, 0x00	; 0
+ 112:	91 70       	andi	r25, 0x01	; 1
+ 114:	89 2f       	mov	r24, r25
+ 116:	99 27       	eor	r25, r25
+ 118:	88 2f       	mov	r24, r24
+ 11a:	90 e0       	ldi	r25, 0x00	; 0
+ 11c:	96 95       	lsr	r25
+ 11e:	98 2f       	mov	r25, r24
+ 120:	88 27       	eor	r24, r24
+ 122:	97 95       	ror	r25
+ 124:	87 95       	ror	r24
+ 126:	98 2f       	mov	r25, r24
+ 128:	89 81       	ldd	r24, Y+1	; 0x01
+ 12a:	89 2b       	or	r24, r25
+ 12c:	89 83       	std	Y+1, r24	; 0x01
+			(Byte)
+					| (((uint8) ((MFRC522_configType_Ptr->TmodeRegister_config->prescaler
+							& 0x0100) >> 8)) << TAuto);
+	MFRC522_writeByte(TModeReg, Byte);
+ 12e:	8a e2       	ldi	r24, 0x2A	; 42
+ 130:	69 81       	ldd	r22, Y+1	; 0x01
+ 132:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = 0;
+ 136:	19 82       	std	Y+1, r1	; 0x01
+	/* setting modeRegister */
+
+	Byte = (Byte)
+ 138:	ea 81       	ldd	r30, Y+2	; 0x02
+ 13a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 13c:	02 80       	ldd	r0, Z+2	; 0x02
+ 13e:	f3 81       	ldd	r31, Z+3	; 0x03
+ 140:	e0 2d       	mov	r30, r0
+ 142:	80 81       	ld	r24, Z
+ 144:	88 2f       	mov	r24, r24
+ 146:	90 e0       	ldi	r25, 0x00	; 0
+ 148:	96 95       	lsr	r25
+ 14a:	98 2f       	mov	r25, r24
+ 14c:	88 27       	eor	r24, r24
+ 14e:	97 95       	ror	r25
+ 150:	87 95       	ror	r24
+ 152:	98 2f       	mov	r25, r24
+ 154:	89 81       	ldd	r24, Y+1	; 0x01
+ 156:	89 2b       	or	r24, r25
+ 158:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->modeReg_config->MSB_mode & 0b00000001)
+					<< MSBFirst);
+	Byte = (Byte)
+ 15a:	ea 81       	ldd	r30, Y+2	; 0x02
+ 15c:	fb 81       	ldd	r31, Y+3	; 0x03
+ 15e:	02 80       	ldd	r0, Z+2	; 0x02
+ 160:	f3 81       	ldd	r31, Z+3	; 0x03
+ 162:	e0 2d       	mov	r30, r0
+ 164:	81 81       	ldd	r24, Z+1	; 0x01
+ 166:	88 2f       	mov	r24, r24
+ 168:	90 e0       	ldi	r25, 0x00	; 0
+ 16a:	81 70       	andi	r24, 0x01	; 1
+ 16c:	90 70       	andi	r25, 0x00	; 0
+ 16e:	88 0f       	add	r24, r24
+ 170:	99 1f       	adc	r25, r25
+ 172:	82 95       	swap	r24
+ 174:	92 95       	swap	r25
+ 176:	90 7f       	andi	r25, 0xF0	; 240
+ 178:	98 27       	eor	r25, r24
+ 17a:	80 7f       	andi	r24, 0xF0	; 240
+ 17c:	98 27       	eor	r25, r24
+ 17e:	98 2f       	mov	r25, r24
+ 180:	89 81       	ldd	r24, Y+1	; 0x01
+ 182:	89 2b       	or	r24, r25
+ 184:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->modeReg_config->TxWaitRF_mode
+					& 0b00000001) << TxWaitRF);
+	Byte = (Byte)
+ 186:	ea 81       	ldd	r30, Y+2	; 0x02
+ 188:	fb 81       	ldd	r31, Y+3	; 0x03
+ 18a:	02 80       	ldd	r0, Z+2	; 0x02
+ 18c:	f3 81       	ldd	r31, Z+3	; 0x03
+ 18e:	e0 2d       	mov	r30, r0
+ 190:	82 81       	ldd	r24, Z+2	; 0x02
+ 192:	88 2f       	mov	r24, r24
+ 194:	90 e0       	ldi	r25, 0x00	; 0
+ 196:	81 70       	andi	r24, 0x01	; 1
+ 198:	90 70       	andi	r25, 0x00	; 0
+ 19a:	88 0f       	add	r24, r24
+ 19c:	99 1f       	adc	r25, r25
+ 19e:	88 0f       	add	r24, r24
+ 1a0:	99 1f       	adc	r25, r25
+ 1a2:	88 0f       	add	r24, r24
+ 1a4:	99 1f       	adc	r25, r25
+ 1a6:	98 2f       	mov	r25, r24
+ 1a8:	89 81       	ldd	r24, Y+1	; 0x01
+ 1aa:	89 2b       	or	r24, r25
+ 1ac:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->modeReg_config->PollMFin_mode
+					& 0b00000001) << PollMFin);
+	Byte = (Byte)
+ 1ae:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1b0:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1b2:	02 80       	ldd	r0, Z+2	; 0x02
+ 1b4:	f3 81       	ldd	r31, Z+3	; 0x03
+ 1b6:	e0 2d       	mov	r30, r0
+ 1b8:	83 81       	ldd	r24, Z+3	; 0x03
+ 1ba:	98 2f       	mov	r25, r24
+ 1bc:	93 70       	andi	r25, 0x03	; 3
+ 1be:	89 81       	ldd	r24, Y+1	; 0x01
+ 1c0:	89 2b       	or	r24, r25
+ 1c2:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->modeReg_config->CRC_mode & 0b00000011)
+					<< CRCPreset);
+
+	MFRC522_writeByte(ModeReg, Byte);
+ 1c4:	81 e1       	ldi	r24, 0x11	; 17
+ 1c6:	69 81       	ldd	r22, Y+1	; 0x01
+ 1c8:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = 0;
+ 1cc:	19 82       	std	Y+1, r1	; 0x01
+
+	Byte = Byte
+ 1ce:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1d0:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1d2:	01 90       	ld	r0, Z+
+ 1d4:	f0 81       	ld	r31, Z
+ 1d6:	e0 2d       	mov	r30, r0
+ 1d8:	84 81       	ldd	r24, Z+4	; 0x04
+ 1da:	95 81       	ldd	r25, Z+5	; 0x05
+ 1dc:	98 2f       	mov	r25, r24
+ 1de:	91 71       	andi	r25, 0x11	; 17
+ 1e0:	89 81       	ldd	r24, Y+1	; 0x01
+ 1e2:	89 2b       	or	r24, r25
+ 1e4:	89 83       	std	Y+1, r24	; 0x01
+			| (uint8) ((MFRC522_configType_Ptr->TmodeRegister_config->prescaler
+					& 0x0011));
+
+	MFRC522_writeByte(TPrescalerReg, Byte);
+ 1e6:	8b e2       	ldi	r24, 0x2B	; 43
+ 1e8:	69 81       	ldd	r22, Y+1	; 0x01
+ 1ea:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = 0;
+ 1ee:	19 82       	std	Y+1, r1	; 0x01
+
+	Byte =
+ 1f0:	ea 81       	ldd	r30, Y+2	; 0x02
+ 1f2:	fb 81       	ldd	r31, Y+3	; 0x03
+ 1f4:	01 90       	ld	r0, Z+
+ 1f6:	f0 81       	ld	r31, Z
+ 1f8:	e0 2d       	mov	r30, r0
+ 1fa:	86 81       	ldd	r24, Z+6	; 0x06
+ 1fc:	97 81       	ldd	r25, Z+7	; 0x07
+ 1fe:	80 70       	andi	r24, 0x00	; 0
+ 200:	91 71       	andi	r25, 0x11	; 17
+ 202:	89 2f       	mov	r24, r25
+ 204:	99 27       	eor	r25, r25
+ 206:	98 2f       	mov	r25, r24
+ 208:	89 81       	ldd	r24, Y+1	; 0x01
+ 20a:	89 2b       	or	r24, r25
+ 20c:	89 83       	std	Y+1, r24	; 0x01
+			Byte
+					| (uint8) (((MFRC522_configType_Ptr->TmodeRegister_config->TreloadReg_regValue
+							& 0x1100) >> 8));
+
+	MFRC522_writeByte(TReloadReg_1, Byte);
+ 20e:	8c e2       	ldi	r24, 0x2C	; 44
+ 210:	69 81       	ldd	r22, Y+1	; 0x01
+ 212:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = 0;
+ 216:	19 82       	std	Y+1, r1	; 0x01
+
+	Byte =
+ 218:	ea 81       	ldd	r30, Y+2	; 0x02
+ 21a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 21c:	01 90       	ld	r0, Z+
+ 21e:	f0 81       	ld	r31, Z
+ 220:	e0 2d       	mov	r30, r0
+ 222:	86 81       	ldd	r24, Z+6	; 0x06
+ 224:	97 81       	ldd	r25, Z+7	; 0x07
+ 226:	98 2f       	mov	r25, r24
+ 228:	91 71       	andi	r25, 0x11	; 17
+ 22a:	89 81       	ldd	r24, Y+1	; 0x01
+ 22c:	89 2b       	or	r24, r25
+ 22e:	89 83       	std	Y+1, r24	; 0x01
+			Byte
+					| (uint8) ((MFRC522_configType_Ptr->TmodeRegister_config->TreloadReg_regValue
+							& 0x0011));
+
+	MFRC522_writeByte(TReloadReg_2, Byte);
+ 230:	8d e2       	ldi	r24, 0x2D	; 45
+ 232:	69 81       	ldd	r22, Y+1	; 0x01
+ 234:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = 0;
+ 238:	19 82       	std	Y+1, r1	; 0x01
+
+	Byte = Byte
+ 23a:	ea 81       	ldd	r30, Y+2	; 0x02
+ 23c:	fb 81       	ldd	r31, Y+3	; 0x03
+ 23e:	01 90       	ld	r0, Z+
+ 240:	f0 81       	ld	r31, Z
+ 242:	e0 2d       	mov	r30, r0
+ 244:	83 81       	ldd	r24, Z+3	; 0x03
+ 246:	88 2f       	mov	r24, r24
+ 248:	90 e0       	ldi	r25, 0x00	; 0
+ 24a:	81 70       	andi	r24, 0x01	; 1
+ 24c:	90 70       	andi	r25, 0x00	; 0
+ 24e:	00 24       	eor	r0, r0
+ 250:	96 95       	lsr	r25
+ 252:	87 95       	ror	r24
+ 254:	07 94       	ror	r0
+ 256:	96 95       	lsr	r25
+ 258:	87 95       	ror	r24
+ 25a:	07 94       	ror	r0
+ 25c:	98 2f       	mov	r25, r24
+ 25e:	80 2d       	mov	r24, r0
+ 260:	98 2f       	mov	r25, r24
+ 262:	89 81       	ldd	r24, Y+1	; 0x01
+ 264:	89 2b       	or	r24, r25
+ 266:	89 83       	std	Y+1, r24	; 0x01
+			| ((MFRC522_configType_Ptr->TmodeRegister_config->transmitModulation
+					& 0b00000001) << Force100ASK);
+
+	MFRC522_writeByte(TxASKReg, Byte);
+ 268:	85 e1       	ldi	r24, 0x15	; 21
+ 26a:	69 81       	ldd	r22, Y+1	; 0x01
+ 26c:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	Byte = MFRC522_readByte(TxControlReg);
+ 270:	84 e1       	ldi	r24, 0x14	; 20
+ 272:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 276:	89 83       	std	Y+1, r24	; 0x01
+	if (!(Byte & 0b00000011)) {
+ 278:	89 81       	ldd	r24, Y+1	; 0x01
+ 27a:	88 2f       	mov	r24, r24
+ 27c:	90 e0       	ldi	r25, 0x00	; 0
+ 27e:	83 70       	andi	r24, 0x03	; 3
+ 280:	90 70       	andi	r25, 0x00	; 0
+ 282:	00 97       	sbiw	r24, 0x00	; 0
+ 284:	39 f4       	brne	.+14     	; 0x294 <MFRC522_init+0x21e>
+		MFRC522_writeByte(TxControlReg, Byte | 0x03); /* setting output signal on TX1 and TX2 */
+ 286:	89 81       	ldd	r24, Y+1	; 0x01
+ 288:	98 2f       	mov	r25, r24
+ 28a:	93 60       	ori	r25, 0x03	; 3
+ 28c:	84 e1       	ldi	r24, 0x14	; 20
+ 28e:	69 2f       	mov	r22, r25
+ 290:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+	}
+
+}
+ 294:	0f 90       	pop	r0
+ 296:	0f 90       	pop	r0
+ 298:	0f 90       	pop	r0
+ 29a:	cf 91       	pop	r28
+ 29c:	df 91       	pop	r29
+ 29e:	08 95       	ret
+
+000002a0 <MFRC522_readByte>:
+ [In]           :  uint8 a_register
+ 	 	 	 	 	 This arg shall indicates the address of the register that you want to read
+ [Returns]      :  This function returns data recieved from MFRC522
+ ----------------------------------------------------------------------------------------------------*/
+
+uint8 MFRC522_readByte(uint8 a_register) {
+ 2a0:	df 93       	push	r29
+ 2a2:	cf 93       	push	r28
+ 2a4:	00 d0       	rcall	.+0      	; 0x2a6 <MFRC522_readByte+0x6>
+ 2a6:	cd b7       	in	r28, 0x3d	; 61
+ 2a8:	de b7       	in	r29, 0x3e	; 62
+ 2aa:	8a 83       	std	Y+2, r24	; 0x02
+	uint8 data;
+	//ENABLE_CHIP();
+	SPI_sendByte(((a_register << 1) & 0x7E) | 0x80);
+ 2ac:	8a 81       	ldd	r24, Y+2	; 0x02
+ 2ae:	88 2f       	mov	r24, r24
+ 2b0:	90 e0       	ldi	r25, 0x00	; 0
+ 2b2:	88 0f       	add	r24, r24
+ 2b4:	99 1f       	adc	r25, r25
+ 2b6:	8e 77       	andi	r24, 0x7E	; 126
+ 2b8:	80 68       	ori	r24, 0x80	; 128
+ 2ba:	0e 94 f1 03 	call	0x7e2	; 0x7e2 <SPI_sendByte>
+	SPI_sendByte(0x00);
+ 2be:	80 e0       	ldi	r24, 0x00	; 0
+ 2c0:	0e 94 f1 03 	call	0x7e2	; 0x7e2 <SPI_sendByte>
+	data = SPI_recieveByte();
+ 2c4:	0e 94 04 04 	call	0x808	; 0x808 <SPI_recieveByte>
+ 2c8:	89 83       	std	Y+1, r24	; 0x01
+	//DISABLE_CHIP();
+	return data;
+ 2ca:	89 81       	ldd	r24, Y+1	; 0x01
+}
+ 2cc:	0f 90       	pop	r0
+ 2ce:	0f 90       	pop	r0
+ 2d0:	cf 91       	pop	r28
+ 2d2:	df 91       	pop	r29
+ 2d4:	08 95       	ret
+
+000002d6 <MFRC522_reset>:
+ [Function Name]:  MFRC522_reset
+ [Description]  :  This function is responsible for reseting MFRC522
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void MFRC522_reset(void) {
+ 2d6:	df 93       	push	r29
+ 2d8:	cf 93       	push	r28
+ 2da:	cd b7       	in	r28, 0x3d	; 61
+ 2dc:	de b7       	in	r29, 0x3e	; 62
+	MFRC522_writeByte(COMMAND_REG, SOFT_RESET_COMMAND);
+ 2de:	81 e0       	ldi	r24, 0x01	; 1
+ 2e0:	6f e0       	ldi	r22, 0x0F	; 15
+ 2e2:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+}
+ 2e6:	cf 91       	pop	r28
+ 2e8:	df 91       	pop	r29
+ 2ea:	08 95       	ret
+
+000002ec <MFRC522_writeByte>:
+				   uint8 a_data
+				   	 This arg shall indicates the data that will be written
+ [Returns]      :  This function returns data recieved from MFRC522
+ ----------------------------------------------------------------------------------------------------*/
+
+void MFRC522_writeByte(uint8 a_register, uint8 a_data) {
+ 2ec:	df 93       	push	r29
+ 2ee:	cf 93       	push	r28
+ 2f0:	00 d0       	rcall	.+0      	; 0x2f2 <MFRC522_writeByte+0x6>
+ 2f2:	cd b7       	in	r28, 0x3d	; 61
+ 2f4:	de b7       	in	r29, 0x3e	; 62
+ 2f6:	89 83       	std	Y+1, r24	; 0x01
+ 2f8:	6a 83       	std	Y+2, r22	; 0x02
+	//ENABLE_CHIP();
+	SPI_sendByte((a_register << 1) & 0b01111110);
+ 2fa:	89 81       	ldd	r24, Y+1	; 0x01
+ 2fc:	88 2f       	mov	r24, r24
+ 2fe:	90 e0       	ldi	r25, 0x00	; 0
+ 300:	88 0f       	add	r24, r24
+ 302:	99 1f       	adc	r25, r25
+ 304:	8e 77       	andi	r24, 0x7E	; 126
+ 306:	0e 94 f1 03 	call	0x7e2	; 0x7e2 <SPI_sendByte>
+	SPI_sendByte(a_data);
+ 30a:	8a 81       	ldd	r24, Y+2	; 0x02
+ 30c:	0e 94 f1 03 	call	0x7e2	; 0x7e2 <SPI_sendByte>
+	//DISABLE_CHIP();
+}
+ 310:	0f 90       	pop	r0
+ 312:	0f 90       	pop	r0
+ 314:	cf 91       	pop	r28
+ 316:	df 91       	pop	r29
+ 318:	08 95       	ret
+
+0000031a <MFRC522_CARD>:
+ [Returns]      :  This function returns status of the operation
+ ----------------------------------------------------------------------------------------------------*/
+
+uint8 MFRC522_CARD(uint8 a_command, uint8 *a_dataSend,
+		uint8 a_dataSendLength, uint8 *a_returnedData,
+		uint32 *a_returnedDataLength, uint16 waitingResponseTime) {
+ 31a:	ef 92       	push	r14
+ 31c:	ff 92       	push	r15
+ 31e:	0f 93       	push	r16
+ 320:	1f 93       	push	r17
+ 322:	df 93       	push	r29
+ 324:	cf 93       	push	r28
+ 326:	cd b7       	in	r28, 0x3d	; 61
+ 328:	de b7       	in	r29, 0x3e	; 62
+ 32a:	66 97       	sbiw	r28, 0x16	; 22
+ 32c:	0f b6       	in	r0, 0x3f	; 63
+ 32e:	f8 94       	cli
+ 330:	de bf       	out	0x3e, r29	; 62
+ 332:	0f be       	out	0x3f, r0	; 63
+ 334:	cd bf       	out	0x3d, r28	; 61
+ 336:	8b 87       	std	Y+11, r24	; 0x0b
+ 338:	7d 87       	std	Y+13, r23	; 0x0d
+ 33a:	6c 87       	std	Y+12, r22	; 0x0c
+ 33c:	4e 87       	std	Y+14, r20	; 0x0e
+ 33e:	38 8b       	std	Y+16, r19	; 0x10
+ 340:	2f 87       	std	Y+15, r18	; 0x0f
+ 342:	1a 8b       	std	Y+18, r17	; 0x12
+ 344:	09 8b       	std	Y+17, r16	; 0x11
+ 346:	fc 8a       	std	Y+20, r15	; 0x14
+ 348:	eb 8a       	std	Y+19, r14	; 0x13
+	uint8 lastBits;
+	uint8 recievedByte;
+	uint8 temp;
+	uint32 waitingResponseTimeCounter;
+
+	switch (a_command) {
+ 34a:	8b 85       	ldd	r24, Y+11	; 0x0b
+ 34c:	28 2f       	mov	r18, r24
+ 34e:	30 e0       	ldi	r19, 0x00	; 0
+ 350:	3e 8b       	std	Y+22, r19	; 0x16
+ 352:	2d 8b       	std	Y+21, r18	; 0x15
+ 354:	8d 89       	ldd	r24, Y+21	; 0x15
+ 356:	9e 89       	ldd	r25, Y+22	; 0x16
+ 358:	8c 30       	cpi	r24, 0x0C	; 12
+ 35a:	91 05       	cpc	r25, r1
+ 35c:	51 f0       	breq	.+20     	; 0x372 <MFRC522_CARD+0x58>
+ 35e:	ed 89       	ldd	r30, Y+21	; 0x15
+ 360:	fe 89       	ldd	r31, Y+22	; 0x16
+ 362:	ee 30       	cpi	r30, 0x0E	; 14
+ 364:	f1 05       	cpc	r31, r1
+ 366:	49 f4       	brne	.+18     	; 0x37a <MFRC522_CARD+0x60>
+	case MF_AUTHENET_COMMAND:		//Certification cards close
+	{
+		/*
+		 * command terminates by itself and any error occurs
+		 */
+		irqEn = 0b00010010;
+ 368:	82 e1       	ldi	r24, 0x12	; 18
+ 36a:	89 87       	std	Y+9, r24	; 0x09
+		/*
+		 * all interrupts requests are set
+		 */
+		waitIRq = 0x10;
+ 36c:	80 e1       	ldi	r24, 0x10	; 16
+ 36e:	88 87       	std	Y+8, r24	; 0x08
+ 370:	04 c0       	rjmp	.+8      	; 0x37a <MFRC522_CARD+0x60>
+		 * the reciever  detects the end of the valid data stream and
+		 * command terminates by itself and any error occurs and
+		 * if any error but in the error register is set and
+		 * the timer decrements to zero
+		 */
+		irqEn = 0b01110111;
+ 372:	87 e7       	ldi	r24, 0x77	; 119
+ 374:	89 87       	std	Y+9, r24	; 0x09
+		/*
+		 * the reciever  detects the end of the valid data stream and
+		 * the command terminates by its self
+		 */
+		waitIRq = 0b00110000;
+ 376:	80 e3       	ldi	r24, 0x30	; 48
+ 378:	88 87       	std	Y+8, r24	; 0x08
+	}
+	default:
+		break;
+	}
+
+	recievedByte = MFRC522_readByte(ComIrqReg);
+ 37a:	84 e0       	ldi	r24, 0x04	; 4
+ 37c:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 380:	8e 83       	std	Y+6, r24	; 0x06
+
+	/* clear all interrupt request pins */
+	MFRC522_writeByte(ComIrqReg, CLEAR_BIT(recievedByte, 7));
+ 382:	8e 81       	ldd	r24, Y+6	; 0x06
+ 384:	8f 77       	andi	r24, 0x7F	; 127
+ 386:	8e 83       	std	Y+6, r24	; 0x06
+ 388:	84 e0       	ldi	r24, 0x04	; 4
+ 38a:	6e 81       	ldd	r22, Y+6	; 0x06
+ 38c:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+	recievedByte = MFRC522_readByte(FIFOLevelReg);
+ 390:	8a e0       	ldi	r24, 0x0A	; 10
+ 392:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 396:	8e 83       	std	Y+6, r24	; 0x06
+
+	/* flush FIFO data */
+	MFRC522_writeByte(FIFOLevelReg, SET_BIT(recievedByte, 7));
+ 398:	8e 81       	ldd	r24, Y+6	; 0x06
+ 39a:	80 68       	ori	r24, 0x80	; 128
+ 39c:	8e 83       	std	Y+6, r24	; 0x06
+ 39e:	8a e0       	ldi	r24, 0x0A	; 10
+ 3a0:	6e 81       	ldd	r22, Y+6	; 0x06
+ 3a2:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	/* sending IDLE command to end current command */
+	MFRC522_writeByte(COMMAND_REG, IDLE_COMMAND);
+ 3a6:	81 e0       	ldi	r24, 0x01	; 1
+ 3a8:	60 e0       	ldi	r22, 0x00	; 0
+ 3aa:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	/* Writing data to the FIFO */
+	for (waitingResponseTimeCounter = 0;
+ 3ae:	19 82       	std	Y+1, r1	; 0x01
+ 3b0:	1a 82       	std	Y+2, r1	; 0x02
+ 3b2:	1b 82       	std	Y+3, r1	; 0x03
+ 3b4:	1c 82       	std	Y+4, r1	; 0x04
+ 3b6:	17 c0       	rjmp	.+46     	; 0x3e6 <MFRC522_CARD+0xcc>
+			waitingResponseTimeCounter < a_dataSendLength;
+			waitingResponseTimeCounter++) {
+		MFRC522_writeByte(FIFODataReg, a_dataSend[waitingResponseTimeCounter]);
+ 3b8:	29 81       	ldd	r18, Y+1	; 0x01
+ 3ba:	3a 81       	ldd	r19, Y+2	; 0x02
+ 3bc:	8c 85       	ldd	r24, Y+12	; 0x0c
+ 3be:	9d 85       	ldd	r25, Y+13	; 0x0d
+ 3c0:	fc 01       	movw	r30, r24
+ 3c2:	e2 0f       	add	r30, r18
+ 3c4:	f3 1f       	adc	r31, r19
+ 3c6:	90 81       	ld	r25, Z
+ 3c8:	89 e0       	ldi	r24, 0x09	; 9
+ 3ca:	69 2f       	mov	r22, r25
+ 3cc:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+	MFRC522_writeByte(COMMAND_REG, IDLE_COMMAND);
+
+	/* Writing data to the FIFO */
+	for (waitingResponseTimeCounter = 0;
+			waitingResponseTimeCounter < a_dataSendLength;
+			waitingResponseTimeCounter++) {
+ 3d0:	89 81       	ldd	r24, Y+1	; 0x01
+ 3d2:	9a 81       	ldd	r25, Y+2	; 0x02
+ 3d4:	ab 81       	ldd	r26, Y+3	; 0x03
+ 3d6:	bc 81       	ldd	r27, Y+4	; 0x04
+ 3d8:	01 96       	adiw	r24, 0x01	; 1
+ 3da:	a1 1d       	adc	r26, r1
+ 3dc:	b1 1d       	adc	r27, r1
+ 3de:	89 83       	std	Y+1, r24	; 0x01
+ 3e0:	9a 83       	std	Y+2, r25	; 0x02
+ 3e2:	ab 83       	std	Y+3, r26	; 0x03
+ 3e4:	bc 83       	std	Y+4, r27	; 0x04
+	/* sending IDLE command to end current command */
+	MFRC522_writeByte(COMMAND_REG, IDLE_COMMAND);
+
+	/* Writing data to the FIFO */
+	for (waitingResponseTimeCounter = 0;
+			waitingResponseTimeCounter < a_dataSendLength;
+ 3e6:	8e 85       	ldd	r24, Y+14	; 0x0e
+ 3e8:	28 2f       	mov	r18, r24
+ 3ea:	30 e0       	ldi	r19, 0x00	; 0
+ 3ec:	40 e0       	ldi	r20, 0x00	; 0
+ 3ee:	50 e0       	ldi	r21, 0x00	; 0
+ 3f0:	89 81       	ldd	r24, Y+1	; 0x01
+ 3f2:	9a 81       	ldd	r25, Y+2	; 0x02
+ 3f4:	ab 81       	ldd	r26, Y+3	; 0x03
+ 3f6:	bc 81       	ldd	r27, Y+4	; 0x04
+ 3f8:	82 17       	cp	r24, r18
+ 3fa:	93 07       	cpc	r25, r19
+ 3fc:	a4 07       	cpc	r26, r20
+ 3fe:	b5 07       	cpc	r27, r21
+ 400:	d8 f2       	brcs	.-74     	; 0x3b8 <MFRC522_CARD+0x9e>
+			waitingResponseTimeCounter++) {
+		MFRC522_writeByte(FIFODataReg, a_dataSend[waitingResponseTimeCounter]);
+	}
+
+	/* starting excuting the command */
+	MFRC522_writeByte(COMMAND_REG, a_command);
+ 402:	81 e0       	ldi	r24, 0x01	; 1
+ 404:	6b 85       	ldd	r22, Y+11	; 0x0b
+ 406:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	if (a_command == TRANSCEIVE_COMMAND) {
+ 40a:	8b 85       	ldd	r24, Y+11	; 0x0b
+ 40c:	8c 30       	cpi	r24, 0x0C	; 12
+ 40e:	59 f4       	brne	.+22     	; 0x426 <MFRC522_CARD+0x10c>
+		recievedByte = MFRC522_readByte(BitFramingReg);
+ 410:	8d e0       	ldi	r24, 0x0D	; 13
+ 412:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 416:	8e 83       	std	Y+6, r24	; 0x06
+
+		/* start transmission of data */
+		MFRC522_writeByte(BitFramingReg, SET_BIT(recievedByte, 7));
+ 418:	8e 81       	ldd	r24, Y+6	; 0x06
+ 41a:	80 68       	ori	r24, 0x80	; 128
+ 41c:	8e 83       	std	Y+6, r24	; 0x06
+ 41e:	8d e0       	ldi	r24, 0x0D	; 13
+ 420:	6e 81       	ldd	r22, Y+6	; 0x06
+ 422:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+	}
+
+	/* time to wait for response */
+	waitingResponseTimeCounter = waitingResponseTime;
+ 426:	8b 89       	ldd	r24, Y+19	; 0x13
+ 428:	9c 89       	ldd	r25, Y+20	; 0x14
+ 42a:	cc 01       	movw	r24, r24
+ 42c:	a0 e0       	ldi	r26, 0x00	; 0
+ 42e:	b0 e0       	ldi	r27, 0x00	; 0
+ 430:	89 83       	std	Y+1, r24	; 0x01
+ 432:	9a 83       	std	Y+2, r25	; 0x02
+ 434:	ab 83       	std	Y+3, r26	; 0x03
+ 436:	bc 83       	std	Y+4, r27	; 0x04
+	do {
+		//CommIrqReg[7..0]
+		//Set1 TxIRq RxIRq IdleIRq HiAlerIRq LoAlertIRq ErrIRq TimerIRq
+		recievedByte = MFRC522_readByte(ComIrqReg); /* reading the ComIrqReg register */
+ 438:	84 e0       	ldi	r24, 0x04	; 4
+ 43a:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 43e:	8e 83       	std	Y+6, r24	; 0x06
+		waitingResponseTimeCounter--; /* decreasing the value of response time */
+ 440:	89 81       	ldd	r24, Y+1	; 0x01
+ 442:	9a 81       	ldd	r25, Y+2	; 0x02
+ 444:	ab 81       	ldd	r26, Y+3	; 0x03
+ 446:	bc 81       	ldd	r27, Y+4	; 0x04
+ 448:	01 97       	sbiw	r24, 0x01	; 1
+ 44a:	a1 09       	sbc	r26, r1
+ 44c:	b1 09       	sbc	r27, r1
+ 44e:	89 83       	std	Y+1, r24	; 0x01
+ 450:	9a 83       	std	Y+2, r25	; 0x02
+ 452:	ab 83       	std	Y+3, r26	; 0x03
+ 454:	bc 83       	std	Y+4, r27	; 0x04
+		 * all interrupts requests are set
+		 *
+		 */
+	} while ((waitingResponseTimeCounter != 0)
+			&& !(recievedByte & MARKET_BITS_IN_CommRqReg_SET)
+			&& !(recievedByte & waitIRq));
+ 456:	89 81       	ldd	r24, Y+1	; 0x01
+ 458:	9a 81       	ldd	r25, Y+2	; 0x02
+ 45a:	ab 81       	ldd	r26, Y+3	; 0x03
+ 45c:	bc 81       	ldd	r27, Y+4	; 0x04
+ 45e:	00 97       	sbiw	r24, 0x00	; 0
+ 460:	a1 05       	cpc	r26, r1
+ 462:	b1 05       	cpc	r27, r1
+ 464:	61 f0       	breq	.+24     	; 0x47e <__stack+0x1f>
+ 466:	8e 81       	ldd	r24, Y+6	; 0x06
+ 468:	88 2f       	mov	r24, r24
+ 46a:	90 e0       	ldi	r25, 0x00	; 0
+ 46c:	81 70       	andi	r24, 0x01	; 1
+ 46e:	90 70       	andi	r25, 0x00	; 0
+ 470:	00 97       	sbiw	r24, 0x00	; 0
+ 472:	29 f4       	brne	.+10     	; 0x47e <__stack+0x1f>
+ 474:	8e 81       	ldd	r24, Y+6	; 0x06
+ 476:	98 85       	ldd	r25, Y+8	; 0x08
+ 478:	89 23       	and	r24, r25
+ 47a:	88 23       	and	r24, r24
+ 47c:	e9 f2       	breq	.-70     	; 0x438 <MFRC522_CARD+0x11e>
+
+	temp = MFRC522_readByte(BitFramingReg);
+ 47e:	8d e0       	ldi	r24, 0x0D	; 13
+ 480:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 484:	8d 83       	std	Y+5, r24	; 0x05
+	MFRC522_writeByte(BitFramingReg, temp & (~0x80));
+ 486:	8d 81       	ldd	r24, Y+5	; 0x05
+ 488:	98 2f       	mov	r25, r24
+ 48a:	9f 77       	andi	r25, 0x7F	; 127
+ 48c:	8d e0       	ldi	r24, 0x0D	; 13
+ 48e:	69 2f       	mov	r22, r25
+ 490:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	if (waitingResponseTimeCounter != 0) /* checking which condition that exits the loop */
+ 494:	89 81       	ldd	r24, Y+1	; 0x01
+ 496:	9a 81       	ldd	r25, Y+2	; 0x02
+ 498:	ab 81       	ldd	r26, Y+3	; 0x03
+ 49a:	bc 81       	ldd	r27, Y+4	; 0x04
+ 49c:	00 97       	sbiw	r24, 0x00	; 0
+ 49e:	a1 05       	cpc	r26, r1
+ 4a0:	b1 05       	cpc	r27, r1
+ 4a2:	09 f4       	brne	.+2      	; 0x4a6 <__stack+0x47>
+ 4a4:	8c c0       	rjmp	.+280    	; 0x5be <__stack+0x15f>
+	{
+		if (!(MFRC522_readByte(ErrorReg)
+ 4a6:	86 e0       	ldi	r24, 0x06	; 6
+ 4a8:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 4ac:	88 2f       	mov	r24, r24
+ 4ae:	90 e0       	ldi	r25, 0x00	; 0
+ 4b0:	8d 71       	andi	r24, 0x1D	; 29
+ 4b2:	90 70       	andi	r25, 0x00	; 0
+ 4b4:	00 97       	sbiw	r24, 0x00	; 0
+ 4b6:	09 f0       	breq	.+2      	; 0x4ba <__stack+0x5b>
+ 4b8:	80 c0       	rjmp	.+256    	; 0x5ba <__stack+0x15b>
+				& (BUFFER_OVF | CRC_ERROR | COLL_ERROR | PROTOCOL_ERROR))) {
+			statusProcess = CARD_FOUND;
+ 4ba:	83 e0       	ldi	r24, 0x03	; 3
+ 4bc:	8a 87       	std	Y+10, r24	; 0x0a
+			if (recievedByte & irqEn & MARKET_BITS_IN_CommRqReg_SET) {
+ 4be:	9e 81       	ldd	r25, Y+6	; 0x06
+ 4c0:	89 85       	ldd	r24, Y+9	; 0x09
+ 4c2:	89 23       	and	r24, r25
+ 4c4:	88 2f       	mov	r24, r24
+ 4c6:	90 e0       	ldi	r25, 0x00	; 0
+ 4c8:	81 70       	andi	r24, 0x01	; 1
+ 4ca:	90 70       	andi	r25, 0x00	; 0
+ 4cc:	88 23       	and	r24, r24
+ 4ce:	11 f0       	breq	.+4      	; 0x4d4 <__stack+0x75>
+				statusProcess = CARD_NOT_FOUND; /* ERROR OCCURS */
+ 4d0:	82 e0       	ldi	r24, 0x02	; 2
+ 4d2:	8a 87       	std	Y+10, r24	; 0x0a
+			}
+
+			if (a_command == TRANSCEIVE_COMMAND) {
+ 4d4:	8b 85       	ldd	r24, Y+11	; 0x0b
+ 4d6:	8c 30       	cpi	r24, 0x0C	; 12
+ 4d8:	09 f0       	breq	.+2      	; 0x4dc <__stack+0x7d>
+ 4da:	71 c0       	rjmp	.+226    	; 0x5be <__stack+0x15f>
+				recievedByte = MFRC522_readByte(FIFOLevelReg);
+ 4dc:	8a e0       	ldi	r24, 0x0A	; 10
+ 4de:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 4e2:	8e 83       	std	Y+6, r24	; 0x06
+				lastBits = MFRC522_readByte(ControlReg) & 0x07;
+ 4e4:	8c e0       	ldi	r24, 0x0C	; 12
+ 4e6:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 4ea:	87 70       	andi	r24, 0x07	; 7
+ 4ec:	8f 83       	std	Y+7, r24	; 0x07
+				if (lastBits) {
+ 4ee:	8f 81       	ldd	r24, Y+7	; 0x07
+ 4f0:	88 23       	and	r24, r24
+ 4f2:	d9 f0       	breq	.+54     	; 0x52a <__stack+0xcb>
+					*a_returnedDataLength = (recievedByte - 1) * 8 + lastBits;
+ 4f4:	8e 81       	ldd	r24, Y+6	; 0x06
+ 4f6:	88 2f       	mov	r24, r24
+ 4f8:	90 e0       	ldi	r25, 0x00	; 0
+ 4fa:	01 97       	sbiw	r24, 0x01	; 1
+ 4fc:	9c 01       	movw	r18, r24
+ 4fe:	22 0f       	add	r18, r18
+ 500:	33 1f       	adc	r19, r19
+ 502:	22 0f       	add	r18, r18
+ 504:	33 1f       	adc	r19, r19
+ 506:	22 0f       	add	r18, r18
+ 508:	33 1f       	adc	r19, r19
+ 50a:	8f 81       	ldd	r24, Y+7	; 0x07
+ 50c:	88 2f       	mov	r24, r24
+ 50e:	90 e0       	ldi	r25, 0x00	; 0
+ 510:	82 0f       	add	r24, r18
+ 512:	93 1f       	adc	r25, r19
+ 514:	aa 27       	eor	r26, r26
+ 516:	97 fd       	sbrc	r25, 7
+ 518:	a0 95       	com	r26
+ 51a:	ba 2f       	mov	r27, r26
+ 51c:	e9 89       	ldd	r30, Y+17	; 0x11
+ 51e:	fa 89       	ldd	r31, Y+18	; 0x12
+ 520:	80 83       	st	Z, r24
+ 522:	91 83       	std	Z+1, r25	; 0x01
+ 524:	a2 83       	std	Z+2, r26	; 0x02
+ 526:	b3 83       	std	Z+3, r27	; 0x03
+ 528:	13 c0       	rjmp	.+38     	; 0x550 <__stack+0xf1>
+				} else {
+					*a_returnedDataLength = recievedByte * 8;
+ 52a:	8e 81       	ldd	r24, Y+6	; 0x06
+ 52c:	88 2f       	mov	r24, r24
+ 52e:	90 e0       	ldi	r25, 0x00	; 0
+ 530:	88 0f       	add	r24, r24
+ 532:	99 1f       	adc	r25, r25
+ 534:	88 0f       	add	r24, r24
+ 536:	99 1f       	adc	r25, r25
+ 538:	88 0f       	add	r24, r24
+ 53a:	99 1f       	adc	r25, r25
+ 53c:	aa 27       	eor	r26, r26
+ 53e:	97 fd       	sbrc	r25, 7
+ 540:	a0 95       	com	r26
+ 542:	ba 2f       	mov	r27, r26
+ 544:	e9 89       	ldd	r30, Y+17	; 0x11
+ 546:	fa 89       	ldd	r31, Y+18	; 0x12
+ 548:	80 83       	st	Z, r24
+ 54a:	91 83       	std	Z+1, r25	; 0x01
+ 54c:	a2 83       	std	Z+2, r26	; 0x02
+ 54e:	b3 83       	std	Z+3, r27	; 0x03
+				}
+
+				if (recievedByte == 0) {
+ 550:	8e 81       	ldd	r24, Y+6	; 0x06
+ 552:	88 23       	and	r24, r24
+ 554:	11 f4       	brne	.+4      	; 0x55a <__stack+0xfb>
+					recievedByte = 1;
+ 556:	81 e0       	ldi	r24, 0x01	; 1
+ 558:	8e 83       	std	Y+6, r24	; 0x06
+				}
+				if (recievedByte > MAX_LENGTH) {
+ 55a:	8e 81       	ldd	r24, Y+6	; 0x06
+ 55c:	81 31       	cpi	r24, 0x11	; 17
+ 55e:	10 f0       	brcs	.+4      	; 0x564 <__stack+0x105>
+					recievedByte = MAX_LENGTH;
+ 560:	80 e1       	ldi	r24, 0x10	; 16
+ 562:	8e 83       	std	Y+6, r24	; 0x06
+				}
+
+				//Reading the received data in FIFO
+				for (waitingResponseTimeCounter = 0;
+ 564:	19 82       	std	Y+1, r1	; 0x01
+ 566:	1a 82       	std	Y+2, r1	; 0x02
+ 568:	1b 82       	std	Y+3, r1	; 0x03
+ 56a:	1c 82       	std	Y+4, r1	; 0x04
+ 56c:	17 c0       	rjmp	.+46     	; 0x59c <__stack+0x13d>
+						waitingResponseTimeCounter < recievedByte;
+						waitingResponseTimeCounter++) {
+					a_returnedData[waitingResponseTimeCounter] =
+ 56e:	29 81       	ldd	r18, Y+1	; 0x01
+ 570:	3a 81       	ldd	r19, Y+2	; 0x02
+ 572:	8f 85       	ldd	r24, Y+15	; 0x0f
+ 574:	98 89       	ldd	r25, Y+16	; 0x10
+ 576:	8c 01       	movw	r16, r24
+ 578:	02 0f       	add	r16, r18
+ 57a:	13 1f       	adc	r17, r19
+ 57c:	89 e0       	ldi	r24, 0x09	; 9
+ 57e:	0e 94 50 01 	call	0x2a0	; 0x2a0 <MFRC522_readByte>
+ 582:	f8 01       	movw	r30, r16
+ 584:	80 83       	st	Z, r24
+				}
+
+				//Reading the received data in FIFO
+				for (waitingResponseTimeCounter = 0;
+						waitingResponseTimeCounter < recievedByte;
+						waitingResponseTimeCounter++) {
+ 586:	89 81       	ldd	r24, Y+1	; 0x01
+ 588:	9a 81       	ldd	r25, Y+2	; 0x02
+ 58a:	ab 81       	ldd	r26, Y+3	; 0x03
+ 58c:	bc 81       	ldd	r27, Y+4	; 0x04
+ 58e:	01 96       	adiw	r24, 0x01	; 1
+ 590:	a1 1d       	adc	r26, r1
+ 592:	b1 1d       	adc	r27, r1
+ 594:	89 83       	std	Y+1, r24	; 0x01
+ 596:	9a 83       	std	Y+2, r25	; 0x02
+ 598:	ab 83       	std	Y+3, r26	; 0x03
+ 59a:	bc 83       	std	Y+4, r27	; 0x04
+					recievedByte = MAX_LENGTH;
+				}
+
+				//Reading the received data in FIFO
+				for (waitingResponseTimeCounter = 0;
+						waitingResponseTimeCounter < recievedByte;
+ 59c:	8e 81       	ldd	r24, Y+6	; 0x06
+ 59e:	28 2f       	mov	r18, r24
+ 5a0:	30 e0       	ldi	r19, 0x00	; 0
+ 5a2:	40 e0       	ldi	r20, 0x00	; 0
+ 5a4:	50 e0       	ldi	r21, 0x00	; 0
+ 5a6:	89 81       	ldd	r24, Y+1	; 0x01
+ 5a8:	9a 81       	ldd	r25, Y+2	; 0x02
+ 5aa:	ab 81       	ldd	r26, Y+3	; 0x03
+ 5ac:	bc 81       	ldd	r27, Y+4	; 0x04
+ 5ae:	82 17       	cp	r24, r18
+ 5b0:	93 07       	cpc	r25, r19
+ 5b2:	a4 07       	cpc	r26, r20
+ 5b4:	b5 07       	cpc	r27, r21
+ 5b6:	d8 f2       	brcs	.-74     	; 0x56e <__stack+0x10f>
+ 5b8:	02 c0       	rjmp	.+4      	; 0x5be <__stack+0x15f>
+					a_returnedData[waitingResponseTimeCounter] =
+							MFRC522_readByte(FIFODataReg);
+				}
+			}
+		} else {
+			statusProcess = ERROR;
+ 5ba:	81 e0       	ldi	r24, 0x01	; 1
+ 5bc:	8a 87       	std	Y+10, r24	; 0x0a
+		}
+
+	}
+
+	return statusProcess;
+ 5be:	8a 85       	ldd	r24, Y+10	; 0x0a
+}
+ 5c0:	66 96       	adiw	r28, 0x16	; 22
+ 5c2:	0f b6       	in	r0, 0x3f	; 63
+ 5c4:	f8 94       	cli
+ 5c6:	de bf       	out	0x3e, r29	; 62
+ 5c8:	0f be       	out	0x3f, r0	; 63
+ 5ca:	cd bf       	out	0x3d, r28	; 61
+ 5cc:	cf 91       	pop	r28
+ 5ce:	df 91       	pop	r29
+ 5d0:	1f 91       	pop	r17
+ 5d2:	0f 91       	pop	r16
+ 5d4:	ff 90       	pop	r15
+ 5d6:	ef 90       	pop	r14
+ 5d8:	08 95       	ret
+
+000005da <MFRC522_getCardSerial>:
+				   uint16 waitingResponseTime
+				     This arg shall indicates the waiting time respone befores time out occurs
+ [Returns]      :  This function returns status of the operation
+ ----------------------------------------------------------------------------------------------------*/
+
+uint8 MFRC522_getCardSerial(uint8 *a_serialOut, uint16 waitingResponseTime) {
+ 5da:	ef 92       	push	r14
+ 5dc:	ff 92       	push	r15
+ 5de:	0f 93       	push	r16
+ 5e0:	1f 93       	push	r17
+ 5e2:	df 93       	push	r29
+ 5e4:	cf 93       	push	r28
+ 5e6:	cd b7       	in	r28, 0x3d	; 61
+ 5e8:	de b7       	in	r29, 0x3e	; 62
+ 5ea:	2b 97       	sbiw	r28, 0x0b	; 11
+ 5ec:	0f b6       	in	r0, 0x3f	; 63
+ 5ee:	f8 94       	cli
+ 5f0:	de bf       	out	0x3e, r29	; 62
+ 5f2:	0f be       	out	0x3f, r0	; 63
+ 5f4:	cd bf       	out	0x3d, r28	; 61
+ 5f6:	99 87       	std	Y+9, r25	; 0x09
+ 5f8:	88 87       	std	Y+8, r24	; 0x08
+ 5fa:	7b 87       	std	Y+11, r23	; 0x0b
+ 5fc:	6a 87       	std	Y+10, r22	; 0x0a
+	uint8 status;
+	uint8 i;
+	uint8 serNumCheck = 0;
+ 5fe:	19 82       	std	Y+1, r1	; 0x01
+	uint32 unLen;
+
+	MFRC522_writeByte(BitFramingReg, 0x00);
+ 600:	8d e0       	ldi	r24, 0x0D	; 13
+ 602:	60 e0       	ldi	r22, 0x00	; 0
+ 604:	0e 94 76 01 	call	0x2ec	; 0x2ec <MFRC522_writeByte>
+
+	a_serialOut[0] = 0x93; /* anti collision */
+ 608:	e8 85       	ldd	r30, Y+8	; 0x08
+ 60a:	f9 85       	ldd	r31, Y+9	; 0x09
+ 60c:	83 e9       	ldi	r24, 0x93	; 147
+ 60e:	80 83       	st	Z, r24
+	a_serialOut[1] = 0x20;
+ 610:	88 85       	ldd	r24, Y+8	; 0x08
+ 612:	99 85       	ldd	r25, Y+9	; 0x09
+ 614:	fc 01       	movw	r30, r24
+ 616:	31 96       	adiw	r30, 0x01	; 1
+ 618:	80 e2       	ldi	r24, 0x20	; 32
+ 61a:	80 83       	st	Z, r24
+	status = MFRC522_CARD(TRANSCEIVE_COMMAND, a_serialOut, 2, a_serialOut,
+ 61c:	28 85       	ldd	r18, Y+8	; 0x08
+ 61e:	39 85       	ldd	r19, Y+9	; 0x09
+ 620:	e8 85       	ldd	r30, Y+8	; 0x08
+ 622:	f9 85       	ldd	r31, Y+9	; 0x09
+ 624:	de 01       	movw	r26, r28
+ 626:	14 96       	adiw	r26, 0x04	; 4
+ 628:	ea 84       	ldd	r14, Y+10	; 0x0a
+ 62a:	fb 84       	ldd	r15, Y+11	; 0x0b
+ 62c:	8c e0       	ldi	r24, 0x0C	; 12
+ 62e:	b9 01       	movw	r22, r18
+ 630:	42 e0       	ldi	r20, 0x02	; 2
+ 632:	9f 01       	movw	r18, r30
+ 634:	8d 01       	movw	r16, r26
+ 636:	0e 94 8d 01 	call	0x31a	; 0x31a <MFRC522_CARD>
+ 63a:	8b 83       	std	Y+3, r24	; 0x03
+			&unLen, waitingResponseTime);
+
+	if (status == CARD_FOUND) {
+ 63c:	8b 81       	ldd	r24, Y+3	; 0x03
+ 63e:	83 30       	cpi	r24, 0x03	; 3
+ 640:	11 f5       	brne	.+68     	; 0x686 <MFRC522_getCardSerial+0xac>
+		//Check card serial number
+		for (i = 0; i < 4; i++) {
+ 642:	1a 82       	std	Y+2, r1	; 0x02
+ 644:	0f c0       	rjmp	.+30     	; 0x664 <MFRC522_getCardSerial+0x8a>
+			serNumCheck ^= a_serialOut[i];
+ 646:	8a 81       	ldd	r24, Y+2	; 0x02
+ 648:	28 2f       	mov	r18, r24
+ 64a:	30 e0       	ldi	r19, 0x00	; 0
+ 64c:	88 85       	ldd	r24, Y+8	; 0x08
+ 64e:	99 85       	ldd	r25, Y+9	; 0x09
+ 650:	fc 01       	movw	r30, r24
+ 652:	e2 0f       	add	r30, r18
+ 654:	f3 1f       	adc	r31, r19
+ 656:	90 81       	ld	r25, Z
+ 658:	89 81       	ldd	r24, Y+1	; 0x01
+ 65a:	89 27       	eor	r24, r25
+ 65c:	89 83       	std	Y+1, r24	; 0x01
+	status = MFRC522_CARD(TRANSCEIVE_COMMAND, a_serialOut, 2, a_serialOut,
+			&unLen, waitingResponseTime);
+
+	if (status == CARD_FOUND) {
+		//Check card serial number
+		for (i = 0; i < 4; i++) {
+ 65e:	8a 81       	ldd	r24, Y+2	; 0x02
+ 660:	8f 5f       	subi	r24, 0xFF	; 255
+ 662:	8a 83       	std	Y+2, r24	; 0x02
+ 664:	8a 81       	ldd	r24, Y+2	; 0x02
+ 666:	84 30       	cpi	r24, 0x04	; 4
+ 668:	70 f3       	brcs	.-36     	; 0x646 <MFRC522_getCardSerial+0x6c>
+			serNumCheck ^= a_serialOut[i];
+		}
+		if (serNumCheck != a_serialOut[i]) {
+ 66a:	8a 81       	ldd	r24, Y+2	; 0x02
+ 66c:	28 2f       	mov	r18, r24
+ 66e:	30 e0       	ldi	r19, 0x00	; 0
+ 670:	88 85       	ldd	r24, Y+8	; 0x08
+ 672:	99 85       	ldd	r25, Y+9	; 0x09
+ 674:	fc 01       	movw	r30, r24
+ 676:	e2 0f       	add	r30, r18
+ 678:	f3 1f       	adc	r31, r19
+ 67a:	90 81       	ld	r25, Z
+ 67c:	89 81       	ldd	r24, Y+1	; 0x01
+ 67e:	98 17       	cp	r25, r24
+ 680:	11 f0       	breq	.+4      	; 0x686 <MFRC522_getCardSerial+0xac>
+			status = ERROR;
+ 682:	81 e0       	ldi	r24, 0x01	; 1
+ 684:	8b 83       	std	Y+3, r24	; 0x03
+		}
+	}
+	return status;
+ 686:	8b 81       	ldd	r24, Y+3	; 0x03
+}
+ 688:	2b 96       	adiw	r28, 0x0b	; 11
+ 68a:	0f b6       	in	r0, 0x3f	; 63
+ 68c:	f8 94       	cli
+ 68e:	de bf       	out	0x3e, r29	; 62
+ 690:	0f be       	out	0x3f, r0	; 63
+ 692:	cd bf       	out	0x3d, r28	; 61
+ 694:	cf 91       	pop	r28
+ 696:	df 91       	pop	r29
+ 698:	1f 91       	pop	r17
+ 69a:	0f 91       	pop	r16
+ 69c:	ff 90       	pop	r15
+ 69e:	ef 90       	pop	r14
+ 6a0:	08 95       	ret
+
+000006a2 <SPI_init>:
+ 	 	 	 	 	 that uses to intialize SPI Driver
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void SPI_init(const SPI_configType  * a_SPI_configType_Ptr)
+{
+ 6a2:	df 93       	push	r29
+ 6a4:	cf 93       	push	r28
+ 6a6:	00 d0       	rcall	.+0      	; 0x6a8 <SPI_init+0x6>
+ 6a8:	cd b7       	in	r28, 0x3d	; 61
+ 6aa:	de b7       	in	r29, 0x3e	; 62
+ 6ac:	9a 83       	std	Y+2, r25	; 0x02
+ 6ae:	89 83       	std	Y+1, r24	; 0x01
+	/* makes SPI pins Output Pins */
+	SPI_DIR_PORT = (1<<SPI_SS) | (1<<SPI_MOSI) | (1<<SPI_MISO) | (SPI_SCK);
+ 6b0:	e7 e3       	ldi	r30, 0x37	; 55
+ 6b2:	f0 e0       	ldi	r31, 0x00	; 0
+ 6b4:	87 e7       	ldi	r24, 0x77	; 119
+ 6b6:	80 83       	st	Z, r24
+	/* setting Interrupt On or OFF */
+	SPCR = (SPCR & 0b01111111) | ((a_SPI_configType_Ptr->interruptMode & 0b00000001)<<(SPIE));
+ 6b8:	ad e2       	ldi	r26, 0x2D	; 45
+ 6ba:	b0 e0       	ldi	r27, 0x00	; 0
+ 6bc:	ed e2       	ldi	r30, 0x2D	; 45
+ 6be:	f0 e0       	ldi	r31, 0x00	; 0
+ 6c0:	80 81       	ld	r24, Z
+ 6c2:	28 2f       	mov	r18, r24
+ 6c4:	2f 77       	andi	r18, 0x7F	; 127
+ 6c6:	e9 81       	ldd	r30, Y+1	; 0x01
+ 6c8:	fa 81       	ldd	r31, Y+2	; 0x02
+ 6ca:	80 81       	ld	r24, Z
+ 6cc:	88 2f       	mov	r24, r24
+ 6ce:	90 e0       	ldi	r25, 0x00	; 0
+ 6d0:	96 95       	lsr	r25
+ 6d2:	98 2f       	mov	r25, r24
+ 6d4:	88 27       	eor	r24, r24
+ 6d6:	97 95       	ror	r25
+ 6d8:	87 95       	ror	r24
+ 6da:	82 2b       	or	r24, r18
+ 6dc:	8c 93       	st	X, r24
+
+	/* setting data order mode */
+	SPCR = (SPCR & 0b11011111) | ((a_SPI_configType_Ptr->dataOrderMode & 0b00000001)<<(DORD));
+ 6de:	ad e2       	ldi	r26, 0x2D	; 45
+ 6e0:	b0 e0       	ldi	r27, 0x00	; 0
+ 6e2:	ed e2       	ldi	r30, 0x2D	; 45
+ 6e4:	f0 e0       	ldi	r31, 0x00	; 0
+ 6e6:	80 81       	ld	r24, Z
+ 6e8:	28 2f       	mov	r18, r24
+ 6ea:	2f 7d       	andi	r18, 0xDF	; 223
+ 6ec:	e9 81       	ldd	r30, Y+1	; 0x01
+ 6ee:	fa 81       	ldd	r31, Y+2	; 0x02
+ 6f0:	81 81       	ldd	r24, Z+1	; 0x01
+ 6f2:	88 2f       	mov	r24, r24
+ 6f4:	90 e0       	ldi	r25, 0x00	; 0
+ 6f6:	81 70       	andi	r24, 0x01	; 1
+ 6f8:	90 70       	andi	r25, 0x00	; 0
+ 6fa:	88 0f       	add	r24, r24
+ 6fc:	99 1f       	adc	r25, r25
+ 6fe:	82 95       	swap	r24
+ 700:	92 95       	swap	r25
+ 702:	90 7f       	andi	r25, 0xF0	; 240
+ 704:	98 27       	eor	r25, r24
+ 706:	80 7f       	andi	r24, 0xF0	; 240
+ 708:	98 27       	eor	r25, r24
+ 70a:	82 2b       	or	r24, r18
+ 70c:	8c 93       	st	X, r24
+
+	/* setting master mode */
+
+	SPCR = (SPCR & 0b11101111) | ((a_SPI_configType_Ptr->masterMode    & 0b00000001)<<(MSTR));
+ 70e:	ad e2       	ldi	r26, 0x2D	; 45
+ 710:	b0 e0       	ldi	r27, 0x00	; 0
+ 712:	ed e2       	ldi	r30, 0x2D	; 45
+ 714:	f0 e0       	ldi	r31, 0x00	; 0
+ 716:	80 81       	ld	r24, Z
+ 718:	28 2f       	mov	r18, r24
+ 71a:	2f 7e       	andi	r18, 0xEF	; 239
+ 71c:	e9 81       	ldd	r30, Y+1	; 0x01
+ 71e:	fa 81       	ldd	r31, Y+2	; 0x02
+ 720:	82 81       	ldd	r24, Z+2	; 0x02
+ 722:	88 2f       	mov	r24, r24
+ 724:	90 e0       	ldi	r25, 0x00	; 0
+ 726:	81 70       	andi	r24, 0x01	; 1
+ 728:	90 70       	andi	r25, 0x00	; 0
+ 72a:	82 95       	swap	r24
+ 72c:	92 95       	swap	r25
+ 72e:	90 7f       	andi	r25, 0xF0	; 240
+ 730:	98 27       	eor	r25, r24
+ 732:	80 7f       	andi	r24, 0xF0	; 240
+ 734:	98 27       	eor	r25, r24
+ 736:	82 2b       	or	r24, r18
+ 738:	8c 93       	st	X, r24
+
+	/* setting clock polarity mode */
+
+	SPCR = (SPCR & 0b11110111) | ((a_SPI_configType_Ptr->clockPolarityMode & 0b00000001)<<(CPOL));
+ 73a:	ad e2       	ldi	r26, 0x2D	; 45
+ 73c:	b0 e0       	ldi	r27, 0x00	; 0
+ 73e:	ed e2       	ldi	r30, 0x2D	; 45
+ 740:	f0 e0       	ldi	r31, 0x00	; 0
+ 742:	80 81       	ld	r24, Z
+ 744:	28 2f       	mov	r18, r24
+ 746:	27 7f       	andi	r18, 0xF7	; 247
+ 748:	e9 81       	ldd	r30, Y+1	; 0x01
+ 74a:	fa 81       	ldd	r31, Y+2	; 0x02
+ 74c:	83 81       	ldd	r24, Z+3	; 0x03
+ 74e:	88 2f       	mov	r24, r24
+ 750:	90 e0       	ldi	r25, 0x00	; 0
+ 752:	81 70       	andi	r24, 0x01	; 1
+ 754:	90 70       	andi	r25, 0x00	; 0
+ 756:	88 0f       	add	r24, r24
+ 758:	99 1f       	adc	r25, r25
+ 75a:	88 0f       	add	r24, r24
+ 75c:	99 1f       	adc	r25, r25
+ 75e:	88 0f       	add	r24, r24
+ 760:	99 1f       	adc	r25, r25
+ 762:	82 2b       	or	r24, r18
+ 764:	8c 93       	st	X, r24
+
+	/* setting clock phase */
+
+	SPCR = (SPCR & 0b11111011) | ((a_SPI_configType_Ptr->clockPhaseMode & 0b00000001)<<(CPHA));
+ 766:	ad e2       	ldi	r26, 0x2D	; 45
+ 768:	b0 e0       	ldi	r27, 0x00	; 0
+ 76a:	ed e2       	ldi	r30, 0x2D	; 45
+ 76c:	f0 e0       	ldi	r31, 0x00	; 0
+ 76e:	80 81       	ld	r24, Z
+ 770:	28 2f       	mov	r18, r24
+ 772:	2b 7f       	andi	r18, 0xFB	; 251
+ 774:	e9 81       	ldd	r30, Y+1	; 0x01
+ 776:	fa 81       	ldd	r31, Y+2	; 0x02
+ 778:	84 81       	ldd	r24, Z+4	; 0x04
+ 77a:	88 2f       	mov	r24, r24
+ 77c:	90 e0       	ldi	r25, 0x00	; 0
+ 77e:	81 70       	andi	r24, 0x01	; 1
+ 780:	90 70       	andi	r25, 0x00	; 0
+ 782:	88 0f       	add	r24, r24
+ 784:	99 1f       	adc	r25, r25
+ 786:	88 0f       	add	r24, r24
+ 788:	99 1f       	adc	r25, r25
+ 78a:	82 2b       	or	r24, r18
+ 78c:	8c 93       	st	X, r24
+
+	/* setting clock rate */
+
+	SPCR = (SPCR & 0b11111100) | ((a_SPI_configType_Ptr->frequencySelect  & 0b00000011)<<(SPR0));
+ 78e:	ad e2       	ldi	r26, 0x2D	; 45
+ 790:	b0 e0       	ldi	r27, 0x00	; 0
+ 792:	ed e2       	ldi	r30, 0x2D	; 45
+ 794:	f0 e0       	ldi	r31, 0x00	; 0
+ 796:	80 81       	ld	r24, Z
+ 798:	98 2f       	mov	r25, r24
+ 79a:	9c 7f       	andi	r25, 0xFC	; 252
+ 79c:	e9 81       	ldd	r30, Y+1	; 0x01
+ 79e:	fa 81       	ldd	r31, Y+2	; 0x02
+ 7a0:	85 81       	ldd	r24, Z+5	; 0x05
+ 7a2:	83 70       	andi	r24, 0x03	; 3
+ 7a4:	89 2b       	or	r24, r25
+ 7a6:	8c 93       	st	X, r24
+	SPSR = (SPCR & 0b11111100) | (((a_SPI_configType_Ptr->frequencySelect & 0b00000100)>>2)<<(SPI2X));
+ 7a8:	ae e2       	ldi	r26, 0x2E	; 46
+ 7aa:	b0 e0       	ldi	r27, 0x00	; 0
+ 7ac:	ed e2       	ldi	r30, 0x2D	; 45
+ 7ae:	f0 e0       	ldi	r31, 0x00	; 0
+ 7b0:	80 81       	ld	r24, Z
+ 7b2:	28 2f       	mov	r18, r24
+ 7b4:	2c 7f       	andi	r18, 0xFC	; 252
+ 7b6:	e9 81       	ldd	r30, Y+1	; 0x01
+ 7b8:	fa 81       	ldd	r31, Y+2	; 0x02
+ 7ba:	85 81       	ldd	r24, Z+5	; 0x05
+ 7bc:	88 2f       	mov	r24, r24
+ 7be:	90 e0       	ldi	r25, 0x00	; 0
+ 7c0:	84 70       	andi	r24, 0x04	; 4
+ 7c2:	90 70       	andi	r25, 0x00	; 0
+ 7c4:	95 95       	asr	r25
+ 7c6:	87 95       	ror	r24
+ 7c8:	95 95       	asr	r25
+ 7ca:	87 95       	ror	r24
+ 7cc:	82 2b       	or	r24, r18
+ 7ce:	8c 93       	st	X, r24
+
+	/* enable SPI */
+	SPCR = (1<<SPE);
+ 7d0:	ed e2       	ldi	r30, 0x2D	; 45
+ 7d2:	f0 e0       	ldi	r31, 0x00	; 0
+ 7d4:	80 e4       	ldi	r24, 0x40	; 64
+ 7d6:	80 83       	st	Z, r24
+
+}
+ 7d8:	0f 90       	pop	r0
+ 7da:	0f 90       	pop	r0
+ 7dc:	cf 91       	pop	r28
+ 7de:	df 91       	pop	r29
+ 7e0:	08 95       	ret
+
+000007e2 <SPI_sendByte>:
+ 	 	 	 	 	 This arg shall indicates the data that shoud be sent
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void SPI_sendByte(const uint8 data)
+{
+ 7e2:	df 93       	push	r29
+ 7e4:	cf 93       	push	r28
+ 7e6:	0f 92       	push	r0
+ 7e8:	cd b7       	in	r28, 0x3d	; 61
+ 7ea:	de b7       	in	r29, 0x3e	; 62
+ 7ec:	89 83       	std	Y+1, r24	; 0x01
+	SPDR = data; //send data by SPI
+ 7ee:	ef e2       	ldi	r30, 0x2F	; 47
+ 7f0:	f0 e0       	ldi	r31, 0x00	; 0
+ 7f2:	89 81       	ldd	r24, Y+1	; 0x01
+ 7f4:	80 83       	st	Z, r24
+	while(BIT_IS_CLEAR(SPSR,SPIF)){} //wait until SPI interrupt flag=1 (data is sent correctly)
+ 7f6:	ee e2       	ldi	r30, 0x2E	; 46
+ 7f8:	f0 e0       	ldi	r31, 0x00	; 0
+ 7fa:	80 81       	ld	r24, Z
+ 7fc:	88 23       	and	r24, r24
+ 7fe:	dc f7       	brge	.-10     	; 0x7f6 <SPI_sendByte+0x14>
+}
+ 800:	0f 90       	pop	r0
+ 802:	cf 91       	pop	r28
+ 804:	df 91       	pop	r29
+ 806:	08 95       	ret
+
+00000808 <SPI_recieveByte>:
+ [Description]  :  This function is responsible for sending Byte through SPI
+ [Returns]      :  This function returns data that should be recieved
+ ----------------------------------------------------------------------------------------------------*/
+
+uint8 SPI_recieveByte(void)
+{
+ 808:	df 93       	push	r29
+ 80a:	cf 93       	push	r28
+ 80c:	cd b7       	in	r28, 0x3d	; 61
+ 80e:	de b7       	in	r29, 0x3e	; 62
+   while(BIT_IS_CLEAR(SPSR,SPIF)){} //wait until SPI interrupt flag=1(data is receive correctly)
+ 810:	ee e2       	ldi	r30, 0x2E	; 46
+ 812:	f0 e0       	ldi	r31, 0x00	; 0
+ 814:	80 81       	ld	r24, Z
+ 816:	88 23       	and	r24, r24
+ 818:	dc f7       	brge	.-10     	; 0x810 <SPI_recieveByte+0x8>
+   return SPDR; //return the received byte from SPI data register
+ 81a:	ef e2       	ldi	r30, 0x2F	; 47
+ 81c:	f0 e0       	ldi	r31, 0x00	; 0
+ 81e:	80 81       	ld	r24, Z
+}
+ 820:	cf 91       	pop	r28
+ 822:	df 91       	pop	r29
+ 824:	08 95       	ret
+
+00000826 <_exit>:
+ 826:	f8 94       	cli
+
+00000828 <__stop_program>:
+ 828:	ff cf       	rjmp	.-2      	; 0x828 <__stop_program>

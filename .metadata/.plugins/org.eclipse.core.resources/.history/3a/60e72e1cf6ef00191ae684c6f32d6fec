@@ -1,0 +1,67 @@
+/*
+ * mfrc522.h
+ *
+ *  Created on: Oct 15, 2019
+ *      Author: eslamelnaggar
+ */
+
+#ifndef MFRC522_H_
+#define MFRC522_H_
+
+/*--------------------------------------------INCLUDES------------------------------------------*/
+
+#include <micro_config.h>
+#include <std_types.h>
+#include <common_macros.h>
+
+/*-------------------------------------------DEFINITIONS----------------------------------------*/
+
+#define WRITE_ERROR    0b10000000 /* error in writing to FIFO Occurs */
+#define TEMP_ERROR     0b01000000 /* error defines overheating */
+#define BUFFER_OVF     0b00010000 /* buffer overflow occurs */
+#define COLL_ERROR     0b00001000 /* Bit-collision detected */
+#define CRC_ERROR      0b00000100
+#define PARITY_ERRPR   0b00000010 /* parity error occurs */
+#define PROTOCOL_ERROR 0b00000001 /* No of bits recieved is incorrect or SOF is incorrect */
+
+
+/*---------------------------------------------ENUMS--------------------------------------------*/
+
+typedef enum {
+	OFF,ON
+}MFRC522_Transmitter_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Reciever_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Idle_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_HighAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_LowAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Error_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Timer_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_CRC_Interrupt_Request;
+
+typedef enum {
+	OPEN_DRAIN_OUTPUT_PAD, STANDART_CMOS_OUTPUT_PAD
+}MFRC522_IRQ_Pin_Mode;
+
+
+#endif /* MFRC522_H_ */

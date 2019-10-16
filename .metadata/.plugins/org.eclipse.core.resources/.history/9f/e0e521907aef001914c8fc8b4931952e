@@ -1,0 +1,39 @@
+/****************************************************************************************************
+ * [File Name]        :  < spi.h >                                                                  *
+ * [Author Name ]     :  < Eslam EL-Naggar >                                                        *
+ * [Date Created]     :  < 15 Oct. , 2019 >                                                         *
+ * [File Description] :  < Header file for Atmega16 SPI Driver >                                    *
+ ***************************************************************************************************/
+
+
+
+/*------------------------------------------INCLUDES-----------------------------------------------*/
+
+#include <spi.h>   /* include header file of SPI driver */
+
+/*-------------------------------------FUNCTIONS DEFINITIONS---------------------------------------*/
+
+
+void SPI_init(const SPI_configType  * a_SPI_configType_Ptr)
+{
+	/* setting Interrupt On or OFF */
+	SPCR = (SPCR & 0b01111111) | ((a_SPI_configType_Ptr->interruptMode & 0b00000001)<<(SPIE));
+
+	/* setting data order mode */
+	SPCR = (SPCR & 0b11011111) | ((a_SPI_configType_Ptr->dataOrderMode & 0b00000001)<<(DORD));
+
+	/* setting master mode */
+
+	SPCR = (SPCR & 0b11101111) | ((a_SPI_configType_Ptr->masterMode    & 0b00000001)<<(MSTR));
+
+
+
+	/* enable SPI */
+	SPCR = (1<<SPE);
+
+	/*
+
+
+
+
+}

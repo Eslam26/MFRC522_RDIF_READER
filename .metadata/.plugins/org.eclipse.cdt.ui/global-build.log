@@ -1,0 +1,17 @@
+17:28:21 **** Incremental Build of configuration Debug for project MFRC522_RDIF_READER ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 MFRC522_RDIF_READER.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    2090 bytes (12.8% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 

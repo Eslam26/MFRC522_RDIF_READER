@@ -1,0 +1,43 @@
+/****************************************************************************************************
+ * [File Name]        :  < spi.h >                                                                  *
+ * [Author Name ]     :  < Eslam EL-Naggar >                                                        *
+ * [Date Created]     :  < 15 Oct. , 2019 >                                                         *
+ * [File Description] :  < Header file for Atmega16 SPI Driver >                                    *
+ ***************************************************************************************************/
+
+
+/*----------------------------------------INCLUDES-------------------------------------------------*/
+
+#include <micro_config.h>
+#include <std_types.h>
+#include <common_macros.h>
+
+/*--------------------------------------DEFINITIONS-----------------------------------------------------*/
+
+#define DEVICE_AS_MASTER 1 /* if device is being to be a master set it to one, if not set it to zero */
+
+
+/*-----------------------------------------ENUMS--------------------------------------------------------*/
+
+typedef enum {
+	OFF, ON
+}SPI_Interrupt_Enable;
+
+typedef enum {
+	MSB_FIRST, LSB_FIRST
+}SPI_Data_Order;
+
+
+
+/*-------------------------------------STRUCTURES-------------------------------------------------------*/
+
+typedef struct {
+	SPI_Interrupt_Enable interruptMode;
+	SPI_Data_Order dataOrderMode;
+}SPI_configType;
+
+
+/*--------------------------------------FUNCTIONS DECLARATIONS------------------------------------------*/
+
+void SPI_init(const SPI_configType  * );
+

@@ -1,0 +1,245 @@
+/*
+ * mfrc522.h
+ *
+ *  Created on: Oct 15, 2019
+ *      Author: eslamelnaggar
+ */
+
+#ifndef MFRC522_H_
+#define MFRC522_H_
+
+/*--------------------------------------------INCLUDES------------------------------------------*/
+
+#include <micro_config.h>
+#include <std_types.h>
+#include <common_macros.h>
+
+/*-------------------------------------------DEFINITIONS----------------------------------------*/
+
+/********* Registers Addresses*********/
+
+/*----- Command AND STATUS -----*/
+#define COMMAND_REG			0x01
+#define ComIEnReg			0x02
+#define DivIEnReg			0x03
+#define ComIrqReg			0x04
+#define DivIrqReg			0x05
+#define ErrorReg			0x06
+#define Status1Reg			0x07
+#define Status2Reg			0x08
+#define FIFODataReg			0x09
+#define FIFOLevelReg		0x0A
+#define WaterLevelReg		0x0B
+#define ControlReg			0x0C
+#define BitFramingReg		0x0D
+#define CollReg				0x0E
+
+
+/*----- Command -----*/
+#define ModeReg				0x11
+#define TxModeReg			0x12
+#define RxModeReg			0x13
+#define TxControlReg		0x14
+#define TxASKReg			0x15
+#define TxSelReg			0x16
+#define RxSelReg			0x17
+#define RxThresholdReg		0x18
+#define	DemodReg			0x19
+#define MfTxReg				0x1C
+#define MfRxReg				0x1D
+#define SerialSpeedReg		0x1F
+
+/*----- CFG -----*/
+#define CRCResultReg_1		0x21
+#define CRCResultReg_2		0x22
+#define ModWidthReg			0x24
+#define RFCfgReg			0x26
+#define GsNReg				0x27
+#define CWGsPReg			0x28
+#define ModGsPReg			0x29
+#define TModeReg			0x2A
+#define TPrescalerReg		0x2B
+#define TReloadReg_1		0x2C
+#define TReloadReg_2		0x2D
+#define TCounterValReg_1	0x2E
+#define TCounterValReg_2 	0x2F
+
+/*----- Test Register -----*/
+#define TestSel1Reg			0x31
+#define TestSel2Reg			0x32
+#define TestPinEnReg		0x33
+#define TestPinValueReg		0x34
+#define TestBusReg			0x35
+#define AutoTestReg			0x36
+#define VersionReg			0x37
+#define AnalogTestReg		0x38
+#define TestDAC1Reg			0x39
+#define TestDAC2Reg			0x3A
+#define TestADCReg			0x3B
+
+/********* ERRORS STATUS*********/
+#define WRITE_ERROR    0b10000000 /* error in writing to FIFO Occurs */
+#define TEMP_ERROR     0b01000000 /* error defines overheating */
+#define BUFFER_OVF     0b00010000 /* buffer overflow occurs */
+#define COLL_ERROR     0b00001000 /* Bit-collision detected */
+#define CRC_ERROR      0b00000100
+#define PARITY_ERRPR   0b00000010 /* parity error occurs */
+#define PROTOCOL_ERROR 0b00000001 /* No of bits recieved is incorrect or SOF is incorrect */
+
+/********* STATUS BITS OF THE CRC, INTERRUPT AND FIFO BUFFER *********/
+#define CRCOk      0b01000000          /* CRC calculation is done correctly */
+#define CRC_READY  0b00100000          /* CRC calculation has finished      */
+#define IRq        0b00010000          /* if any interrupt source requests attention */
+#define TRunning   0b00001000          /* MFRC522's timer is running                 */
+#define HiAlert    0b00000010          /* FIFO Buffer High Level */
+#define LoAlert    0b00000001          /* FIFO Buffer Low Level  */
+
+#define MARKET_BITS_IN_CommRqReg_SET 0x01
+
+
+/********* COMMANDS *********/
+#define IDLE_COMMAND 				0x00
+#define MEM_COMMAND					0x01
+#define GENERATE_RANDOM_ID_COMMAND	0x02
+#define CALC_CRC_COMMAND			0x03
+#define TRANSMIT_COMMAND			0x04
+#define NO_CMD_Change_COMMAND	    0x07
+#define RECIEVE_COMMAND				0x08
+#define TRANSCEIVE_COMMAND			0x0C
+#define MF_AUTHENET_COMMAND			0x0E
+#define SOFT_RESET_COMMAND			0x0F
+
+
+/********* BIT NUMBER ********/
+/*---TmodeReg---*/
+#define TAuto         7
+#define TGated        5
+#define TAutoRestart  4
+#define TPrescaler_Hi 0
+
+/*---modeReg---*/
+
+#define MSBFirst 7
+#define TxWaitRF 5
+#define PollMFin 3
+#define CRCPreset 0
+
+/*---TxASKReg--- */
+
+#define Force100ASK 6
+
+
+/*-------------------------------------------MACROS------------------------------------------*/
+
+
+
+
+
+/*---------------------------------------------ENUMS--------------------------------------------*/
+
+typedef enum {
+	OFF,ON
+}MFRC522_Transmitter_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Reciever_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Idle_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_HighAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_LowAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Error_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Timer_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_CRC_Interrupt_Request;
+
+typedef enum {
+	OPEN_DRAIN_OUTPUT_PAD, STANDART_CMOS_OUTPUT_PAD
+}MFRC522_IRQ_Pin_Mode;
+
+typedef enum {
+	HIGH_SPEED_MODE_INDEPENDENT_I2C_PROTOCOl, I2C_PROTOCOL
+}MFRC522_I2C_FORCE_HS;
+
+
+/*----------TmodeReg setup-------*/
+typedef enum{
+	OFF, ON
+}MFRC522_Timer_Auto;
+
+typedef enum {
+	NON_GATED_MODE, GATED_MFIN, GATED_AUX1, GATED_A3
+}MFRC522_Timer_Gated_Mode;
+
+typedef enum {
+	ZERO, ONE
+}MFRC522_Timer_Auto_Restart;
+
+
+typedef enum {
+	FORCE100ASK_OFF, FORCE100ASK_ON
+}MFRC522_Transmit_Modulation;
+
+/*-----------modeReg setup--------*/
+typedef enum {
+	OFF, ON
+}MFRC522_MSB_FIRST_mode;
+
+typedef enum {
+	OFF, ON
+}MFRC522_TxWaitRF_mode;
+
+typedef enum {
+	POLARITY_MFIN_LOW, 	POLARITY_MFIN_HIGH
+}MFRC522_PollMFin;
+
+typedef enum {
+	_00, _01, _10, _11
+}MFRC522_CRC_Preset;
+
+
+
+
+
+
+/*--------------------------------------STRUCTURES-------------------------------------------*/
+
+typedef struct{
+	MFRC522_Timer_Auto timerAuto;                     /* setting Timer Auto Mode */
+	MFRC522_Timer_Gated_Mode gatedMode;               /* setting gated Mode */
+	MFRC522_Timer_Auto_Restart autoRestart;           /* setting auto Restart mode */
+	MFRC522_Transmit_Modulation transmitModulation;   /* setting transmit modulation mode */
+	uint16 prescaler ;                                /* value of the prescaler */
+	uint16 TreloadReg_regValue ;                      /* value of TreloadReg register */
+
+}MFRC522_TmodeRegister_configuration;
+
+typedef struct{
+	MFRC522_MSB_FIRST_mode MSB_mode;
+	MFRC522_TxWaitRF_mode TxWaitRF_mode;
+	MFRC522_PollMFin PollMFin_mode;
+	MFRC522_CRC_Preset CRC_mode;
+}MFRC522_modeReg_configuration;
+
+typedef struct{
+	MFRC522_TmodeRegister_configuration TmodeRegister_config;
+	MFRC522_modeReg_configuration modeReg_config;
+}MFRC522_configType;
+
+#endif /* MFRC522_H_ */

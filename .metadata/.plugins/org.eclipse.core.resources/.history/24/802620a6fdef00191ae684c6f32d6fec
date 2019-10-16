@@ -1,0 +1,50 @@
+/*
+ * mfrc522.c
+ *
+ *  Created on: Oct 15, 2019
+ *      Author: eslamelnaggar
+ */
+
+
+/*----------------------------------------INCLUDES-----------------------------------------------*/
+
+#include <mfrc522.h> /* include header file of MFRC522 device */
+
+
+/*------------------------------------FUNCTION DEFINITIONS--------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------
+ [Function Name]:  MFRC522_init
+ [Description]  :  This function is responsible for initializing MFRC522
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void MFRC522_init(void)
+{
+
+}
+
+
+uint8_t mfrc522_read(uint8_t reg)
+{
+	uint8_t data;
+	ENABLE_CHIP();
+	spi_transmit(((reg<<1)&0x7E)|0x80);
+	data = spi_transmit(0x00);
+	DISABLE_CHIP();
+	return data;
+}
+
+
+void MFRC522_reset()
+{
+	MFRC522_write(COMMAND_REG,SOFT_RESET_COMMAND);
+}
+
+void MFRC522_write(uint8 a_register, uint8 a_data)
+{
+	ENABLE_CHIP();
+	spi_transmit((reg<<1)&0x7E);
+	spi_transmit(data);
+	DISABLE_CHIP();
+}

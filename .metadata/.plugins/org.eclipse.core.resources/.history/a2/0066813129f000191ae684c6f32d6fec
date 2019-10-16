@@ -1,0 +1,86 @@
+/****************************************************************************************************
+ * [File Name]        :  < spi.h >                                                                  *
+ * [Author Name ]     :  < Eslam EL-Naggar >                                                        *
+ * [Date Created]     :  < 15 Oct. , 2019 >                                                         *
+ * [File Description] :  < Header file for Atmega16 SPI Driver >                                    *
+ ***************************************************************************************************/
+
+
+
+/*------------------------------------------INCLUDES-----------------------------------------------*/
+
+#include "spi.h" /* include header file of SPI driver */
+
+/*-------------------------------------FUNCTIONS DEFINITIONS---------------------------------------*/
+
+
+void SPI_init(const SPI_configType  * a_SPI_configType_Ptr)
+{
+	/* makes SPI pins Output Pins */
+	SPI_DIR_PORT = (1<<SPI_SS) | (1<<SPI_MOSI) | (1<<SPI_MISO) | (SPI_SCK);
+	/* setting Interrupt On or OFF */
+	SPCR = (SPCR & 0b01111111) | ((a_SPI_configType_Ptr->interruptMode & 0b00000001)<<(SPIE));
+
+	/* setting data order mode */
+	SPCR = (SPCR & 0b11011111) | ((a_SPI_configType_Ptr->dataOrderMode & 0b00000001)<<(DORD));
+
+	/* setting master mode */
+
+	SPCR = (SPCR & 0b11101111) | ((a_SPI_configType_Ptr->masterMode    & 0b00000001)<<(MSTR));
+
+	/* setting clock polarity mode */
+
+	SPCR = (SPCR & 0b11110111) | ((a_SPI_configType_Ptr->clockPolarityMode & 0b00000001)<<(CPOL));
+
+	/* setting clock phase */
+
+	SPCR = (SPCR & 0b11111011) | ((a_SPI_configType_Ptr->clockPhaseMode & 0b00000001)<<(CPHA));
+
+	/* setting clock rate */
+
+	SPCR = (SPCR & 0b11111100) | ((a_SPI_configType_Ptr->frequencySelect  & 0b00000011)<<(SPR0));
+	SPSR = (SPCR & 0b11111100) | (((a_SPI_configType_Ptr->frequencySelect & 0b00000100)>>2)<<(SPI2X));
+
+	/* enable SPI */
+	SPCR = (1<<SPE);
+
+}
+
+void SPI_sendByte(const uint8 data)
+{
+	SPDR = data; //send data by SPI
+	while(BIT_IS_CLEAR(SPSR,SPIF)){} //wait until SPI interrupt flag=1 (data is sent correctly)
+}
+
+uint8 SPI_recieveByte(void)
+{
+   while(BIT_IS_CLEAR(SPSR,SPIF)){} //wait until SPI interrupt flag=1(data is receive correctly)
+   return SPDR; //return the received byte from SPI data register
+}
+
+void SPI_SendString(const uint8 *Str)
+{
+	uint8 i = 0;
+	while(Str[i] != '\0')
+	{
+		SPI_sendByte(Str[i]);
+		i++;
+	}
+}
+
+void SPI_ReceiveString(char *Str)
+{
+	unsigned char i = 0;
+	Str[i] = SPI_recieveByte();
+	while(Str[i] != '#')
+	{
+		i++;
+		Str[i] = SPI_recieveByte();
+	}
+	Str[i] = '\0';
+}
+
+
+
+
+

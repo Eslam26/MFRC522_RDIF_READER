@@ -1,0 +1,47 @@
+/*
+ * mfrc522.h
+ *
+ *  Created on: Oct 15, 2019
+ *      Author: eslamelnaggar
+ */
+
+#ifndef MFRC522_H_
+#define MFRC522_H_
+
+/*--------------------------------------------INCLUDES------------------------------------------*/
+
+#include <micro_config.h>
+#include <std_types.h>
+#include <common_macros.h>
+
+/*---------------------------------------------ENUMS--------------------------------------------*/
+
+typedef enum {
+	OFF,ON
+}MFRC522_Transmitter_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Reciever_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Idle_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_HighAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_LowAlert_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Transmitter_Interrupt_Request;
+
+typedef enum {
+	OFF,ON
+}MFRC522_Transmitter_Interrupt_Request;
+
+#endif /* MFRC522_H_ */

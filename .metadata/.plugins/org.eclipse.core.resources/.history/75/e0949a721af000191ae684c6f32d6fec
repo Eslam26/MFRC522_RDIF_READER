@@ -1,0 +1,217 @@
+/*
+ * mfrc522.c
+ *
+ *  Created on: Oct 15, 2019
+ *      Author: eslamelnaggar
+ */
+
+
+/*----------------------------------------INCLUDES-----------------------------------------------*/
+
+#include <mfrc522.h> /* include header file of MFRC522 device */
+
+
+/*------------------------------------FUNCTION DEFINITIONS--------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------
+ [Function Name]:  MFRC522_init
+ [Description]  :  This function is responsible for initializing MFRC522
+ [Returns]      :  This function returns void
+ ----------------------------------------------------------------------------------------------------*/
+
+void MFRC522_init(const MFRC522_configType * MFRC522_configType_Ptr)
+{
+	uint8 Byte = 0;
+	MFRC522_reset();
+	/* setting TmodeRegister */
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->TmodeRegister_config->timerAuto & 0b00000001)<<TAuto);
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->TmodeRegister_config->gatedMode & 0b00000011)<<TGated);
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->TmodeRegister_config->autoRestart & 0b00000001)<<TAutoRestart);
+	Byte = ( Byte ) | (((uint8)((MFRC522_configType_Ptr->TmodeRegister_config->prescaler & 0x0100)>>8))<<TAuto);
+	MFRC522_writeByte(TModeReg, Byte);
+
+	Byte = 0;
+	/* setting modeRegister */
+
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->modeReg_config->MSB_mode      & 0b00000001)<<MSBFirst);
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->modeReg_config->TxWaitRF_mode & 0b00000001)<<TxWaitRF);
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->modeReg_config->PollMFin_mode & 0b00000001)<<PollMFin);
+	Byte = ( Byte ) | ((MFRC522_configType_Ptr->modeReg_config->CRC_mode      & 0b00000011)<<CRCPreset);
+
+	MFRC522_writeByte(ModeReg, Byte);
+
+	Byte = 0;
+
+	Byte = Byte | (uint8)((MFRC522_configType_Ptr->TmodeRegister_config->prescaler & 0x0011));
+
+	MFRC522_writeByte(TPrescalerReg, Byte);
+
+	Byte = 0;
+
+	Byte = Byte | (uint8)(((MFRC522_configType_Ptr->TmodeRegister_config->TreloadReg_regValue & 0x1100)>>8));
+
+	MFRC522_writeByte(TReloadReg_1, Byte);
+
+	Byte = 0;
+
+	Byte = Byte | (uint8)((MFRC522_configType_Ptr->TmodeRegister_config->TreloadReg_regValue & 0x0011));
+
+	MFRC522_writeByte(TReloadReg_2, Byte);
+
+	Byte = 0;
+
+	Byte = Byte | ((MFRC522_configType_Ptr->TmodeRegister_config->transmitModulation & 0b00000001)<<Force100ASK);
+
+	MFRC522_writeByte(TxASKReg, Byte);
+
+	Byte = mfrc522_readByte(TxControlReg);
+		if(!(Byte& 0b00000011))
+		{
+			mfrc522_write(TxControlReg,Byte| 0x03); /* setting output signal on TX1 and TX2 */
+		}
+
+}
+
+
+uint8 MFRC522_readByte(uint8_t a_register)
+{
+	uint8 data;
+	//ENABLE_CHIP();
+	SPI_sendByte(((a_register<<1)&0x7E)|0x80);
+	data = SPI_sendByte(0x00);
+	//DISABLE_CHIP();
+	return data;
+}
+
+
+void MFRC522_reset()
+{
+	MFRC522_write(COMMAND_REG,SOFT_RESET_COMMAND);
+}
+
+void MFRC522_writeByte(uint8 a_register, uint8 a_data)
+{
+	//ENABLE_CHIP();
+	SPI_sendByte((a_register<<1)&0b01111110);
+	SPI_sendByte(a_data);
+	//DISABLE_CHIP();
+}
+
+uint8_t mfrc522_to_card(uint8 cmd, uint8 *send_data, uint8 send_data_len, uint8 *back_data, uint32 *back_data_len)
+{
+	uint8 status = 0;
+    uint8 irqEn = 0x00;
+    uint8 waitIRq = 0x00;
+    uint8 lastBits;
+    uint8 n;
+    uint8	tmp;
+    uint32 i;
+
+    switch (cmd)
+    {
+        case MF_AUTHENET_COMMAND:		//Certification cards close
+		{
+			irqEn = 0x12;
+			waitIRq = 0x10;
+			break;
+		}
+		case TRANSCEIVE_COMMAND:	//Transmit FIFO data
+		{
+			irqEn = 0x77;     0b01110111
+			waitIRq = 0x30;   0b00110000
+			break;
+		}
+		default:
+			break;
+    }
+
+    //mfrc522_write(ComIEnReg, irqEn|0x80);	//Interrupt request
+    n=mfrc522_read(ComIrqReg);
+    mfrc522_write(ComIrqReg,n&(~0x80));//clear all interrupt bits
+    n=mfrc522_read(FIFOLevelReg);
+    mfrc522_write(FIFOLevelReg,n|0x80);//flush FIFO data
+
+	mfrc522_write(CommandReg, Idle_CMD);	//NO action; Cancel the current cmd???
+
+	//Writing data to the FIFO
+    for (i=0; i<send_data_len; i++)
+    {
+		mfrc522_write(FIFODataReg, send_data[i]);
+	}
+
+	//Execute the cmd
+	mfrc522_write(CommandReg, cmd);
+    if (cmd == Transceive_CMD)
+    {
+		n=mfrc522_read(BitFramingReg);
+		mfrc522_write(BitFramingReg,n|0x80);
+	}
+
+	//Waiting to receive data to complete
+	i = 2000;	//i according to the clock frequency adjustment, the operator M1 card maximum waiting time 25ms???
+    do
+    {
+		//CommIrqReg[7..0]
+		//Set1 TxIRq RxIRq IdleIRq HiAlerIRq LoAlertIRq ErrIRq TimerIRq
+        n = mfrc522_read(ComIrqReg);
+        i--;
+    }
+    while ((i!=0) && !(n&0x01) && !(n&waitIRq));
+
+	tmp=mfrc522_read(BitFramingReg);
+	mfrc522_write(BitFramingReg,tmp&(~0x80));
+
+    if (i != 0)
+    {
+        if(!(mfrc522_read(ErrorReg) & 0x1B))	//BufferOvfl Collerr CRCErr ProtecolErr
+        {
+            status = CARD_FOUND;
+            if (n & irqEn & 0x01)
+            {
+				status = CARD_NOT_FOUND;			//??
+			}
+
+            if (cmd == Transceive_CMD)
+            {
+               	n = mfrc522_read(FIFOLevelReg);
+              	lastBits = mfrc522_read(ControlReg) & 0x07;
+                if (lastBits)
+                {
+					*back_data_len = (n-1)*8 + lastBits;
+				}
+                else
+                {
+					*back_data_len = n*8;
+				}
+
+                if (n == 0)
+                {
+					n = 1;
+				}
+                if (n > MAX_LEN)
+                {
+					n = MAX_LEN;
+				}
+
+				//Reading the received data in FIFO
+                for (i=0; i<n; i++)
+                {
+					back_data[i] = mfrc522_read(FIFODataReg);
+				}
+            }
+        }
+        else
+        {
+			status = ERROR;
+		}
+
+    }
+
+    //SetBitMask(ControlReg,0x80);           //timer stops
+    //mfrc522_write(cmdReg, PCD_IDLE);
+
+    return status;
+}
+
+
+
