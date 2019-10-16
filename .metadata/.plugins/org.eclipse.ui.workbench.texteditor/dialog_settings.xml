@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="true"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<item key="selection" value="MFRC522_CARD"/>
+		<list key="findhistory">
+			<item value="mfrc522_to_card"/>
+			<item value="tmp"/>
+			<item value="command"/>
+			<item value="a_command"/>
+			<item value="back_data_len"/>
+			<item value="back_data"/>
+			<item value="returnedData"/>
+			<item value="send_data"/>
+			<item value="send_data_len"/>
+			<item value="MARKET_BITS_IN_CommRqReg_SET"/>
+			<item value="cmd"/>
+			<item value="i"/>
+			<item value="Idle_CMD"/>
+			<item value="CommandReg"/>
+			<item value="status"/>
+		</list>
+		<list key="replacehistory">
+			<item value="MFRC522_CARD"/>
+			<item value="temp"/>
+			<item value="a_command"/>
+			<item value="a_returnedDataLength"/>
+			<item value="a_returnedData"/>
+			<item value="a_dataSend"/>
+			<item value="a_dataSendLength"/>
+			<item value="command"/>
+			<item value="waitingResponseTimeCounter"/>
+			<item value="IDLE_COMMAND"/>
+			<item value="COMMAND_REG"/>
+			<item value="statusProcess"/>
+			<item value="recievedByte"/>
+			<item value="MFRC522_writeByte"/>
+			<item value="MFRC522_readByte"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1331"/>
+		<item key="DIALOG_Y_ORIGIN" value="378"/>
+		<item key="DIALOG_WIDTH" value="336"/>
+		<item key="DIALOG_HEIGHT" value="454"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+</section>
